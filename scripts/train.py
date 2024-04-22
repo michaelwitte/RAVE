@@ -20,6 +20,7 @@ import rave
 import rave.core
 import rave.dataset
 from rave.transforms import get_augmentations, add_augmentation
+from utils import config
 
 
 FLAGS = flags.FLAGS
@@ -133,7 +134,12 @@ def parse_augmentations(augmentations):
 
 def main(argv):
     torch.set_float32_matmul_precision('high')
-    torch.backends.cudnn.benchmark = True
+    # torch.backends.cudnn.benchmark = True
+
+    random_seed = 42
+
+    config.set_random_seeds(random_seed)
+    pl.seed_everything(random_seed)
 
     # check dataset channels
     n_channels = rave.dataset.get_training_channels(FLAGS.db_path, FLAGS.channels)
@@ -252,6 +258,7 @@ def main(argv):
         profiler="simple",
         enable_progress_bar=FLAGS.progress,
         **val_check,
+        deterministic="warn"
     )
 
     run = rave.core.search_for_run(FLAGS.ckpt)
