@@ -14,3 +14,4 @@ __version__*
 PKG-INFO
 .junit-test-report.xml
 processed/
+raw_copy/
